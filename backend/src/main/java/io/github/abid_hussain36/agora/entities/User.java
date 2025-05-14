@@ -1,12 +1,20 @@
-package io.github.abid_hussain36.agora.user;
+package io.github.abid_hussain36.agora.entities;
 
-import io.github.abid_hussain36.agora.event.Event;
-import io.github.abid_hussain36.agora.utils.Interest;
+import io.github.abid_hussain36.agora.utils.enums.Interest;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 public class User {
@@ -46,39 +54,36 @@ public class User {
     @ElementCollection(targetClass = Interest.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name="user_interests", joinColumns = @JoinColumn(name="user_id"))
-    @Column(name="interest", nullable = true)
-    private List<Interest> interests;
+    @Column(name="interest", nullable = false)
+    private List<Interest> interests = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name="user_favorites",
-            joinColumns = @JoinColumn(name="user_id"), // Foreign Key
-            inverseJoinColumns = @JoinColumn(name="favorite_user_id") // Columns we want
-    )
-    private List<User> favoriteUsers;
+    //private List<User> favoriteUsers;
 
     @OneToMany(mappedBy = "host", cascade = CascadeType.ALL)
-    private List<Event> hostedEvents;
+    @Column(nullable = false)
+    private List<Event> hostedEvents = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
-            name="event_attendees",
+            name="student_registration",
             joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="event_id")
+            inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> registeredEvents;
+    @Column(nullable = false)
+    private List<Event> registeredEvents = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
-            name="user_saved",
+            name="student_saved",
             joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="event_id")
+            inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> savedEvents;
+    @Column(nullable = false)
+    private List<Event> savedEvents = new ArrayList<>();
 
     @Transient
-    private int eventHostCount;
+    private Integer eventHostCount;
 
     @Transient
-    private int registerCount;
+    private Integer eventAttendCount;
 }

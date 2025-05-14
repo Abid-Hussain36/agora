@@ -1,13 +1,21 @@
-package io.github.abid_hussain36.agora.event;
+package io.github.abid_hussain36.agora.entities;
 
-import io.github.abid_hussain36.agora.user.User;
-import io.github.abid_hussain36.agora.utils.EventType;
-import io.github.abid_hussain36.agora.utils.Interest;
+import io.github.abid_hussain36.agora.utils.enums.EventType;
+import io.github.abid_hussain36.agora.utils.enums.Interest;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="events")
 public class Event {
@@ -37,9 +45,9 @@ public class Event {
 
     @ElementCollection(targetClass = Interest.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name="event_interests", joinColumns = @JoinColumn(name="user.id"))
-    @Column(name="interests")
-    private List<Interest> interests;
+    @CollectionTable(name="event_interests", joinColumns = @JoinColumn(name="user_id"))
+    @Column(name="interests", nullable = false)
+    private List<Interest> interests = new ArrayList<>();
 
     private String subject;
 
